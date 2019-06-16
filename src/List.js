@@ -27,6 +27,9 @@ class List extends Component {
         const venues = response.data.response.groups[0].items;
         this.props.setMarkers(venues);
         this.setState({ places: venues });
+      }).catch(err => {
+        alert('Something went wrong!');
+        console.log('fetchPlaces', err);
       });
   };
 
@@ -46,6 +49,9 @@ class List extends Component {
         this.props.setMarkers(venues);
         this.setState({ places: venues });
         this.setState({ query });
+      }).catch(err => {
+        alert('Something went wrong!');
+        console.log('handleQueryUpdate', err);
       });
   }
 

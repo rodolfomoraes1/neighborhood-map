@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import ErrorBoundary from './ErrorBoundary';
 
 const GOOGLE_MAPS_API_BASE_URL = 'https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_API_TOKEN&v=3.exp&libraries=geometry,drawing,places&callback=onMapLoaded';
 const GOOGLE_MAPS_API_TOKEN = 'AIzaSyAhIp-9s7x267GedYCW4vA9R5AHTf2v9D8';
@@ -27,6 +28,7 @@ const MapComponent = withScriptjs(withGoogleMap(props => {
         <Marker
           key={index}
           position={place}
+          animation={place.clicked ? window.google.maps.Animation.BOUNCE: false}
           onClick={() => {props.onMarkerClick(index)}} /> ))
       }
     </GoogleMap>
@@ -58,16 +60,18 @@ class Map extends Component {
       aria-label='map'
       className='map-container'
       style={{marginLeft: '250px'}}>
-      <MapComponent
-        isMarkerShown={this.props.places.length > 0}
-        googleMapURL={GOOGLE_MAPS_API_URL}
-        loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `100%` }} />}
-        mapElement={<div style={{ height: `100%` }} />}
-        places={this.props.places}
-        hideInfoWindow={this.props.hideInfoWindow}
-        onMarkerClick={this.props.onMarkerClick}
-      />
+      <ErrorBoundary>
+        <MapComponent
+          isMarkerShown={this.props.places.length > 0}
+          googleMapURL={GOOGLE_MAPS_API_URL}
+          loadingElement={<div style={{ height: `100%` }} />}
+          containerElement={<div style={{ height: `100%` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+          places={this.props.places}
+          hideInfoWindow={this.props.hideInfoWindow}
+          onMarkerClick={this.props.onMarkerClick}
+        />
+      </ErrorBoundary>
     </div>;
   }
 }
